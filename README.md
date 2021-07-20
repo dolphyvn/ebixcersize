@@ -1,2 +1,4 @@
 # ebixcersize
-This is the second test works for EBI
+Monitoring solution using Docker host with Prometheus, Grafana and NodeExporter
+
+
