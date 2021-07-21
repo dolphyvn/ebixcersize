@@ -1,1 +1,0 @@
-{"dependencies":[["vagrant-docker-compose",["= 1.5.1"]],["log4r",[">= 0"]],["concurrent-ruby",["~> 1.0"]],["i18n",[">= 0"]],["micromachine",[">= 2","< 4"]],["vagrant-vbguest",["= 0.30.0"]]],"checksum":"0d178d8e08eaadfd35ff34f02932db8693b31dff9d1c2386b6d07a2743e1c8e9","vagrant_version":"2.2.17"}
