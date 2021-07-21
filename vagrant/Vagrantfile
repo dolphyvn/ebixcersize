@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vagrant.plugins = ["vagrant-vbguest"]
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+  config.vm.network "forwarded_port", guest: 9090, host: 9090
+  config.vm.network "forwarded_port", guest: 9100, host: 9100
+  #
+  # config.vm.synced_folder "../../ebixcersize/", "/vagrant_data/"
+  config.vm.define "monitoring" do |mn|
+    mn.vm.network "private_network", type: "dhcp"
+    mn.vm.synced_folder "../", "/vagrant_data/", nfs: true
+    mn.vbguest.installer_options = { allow_kernel_upgrade: true }
+    mn.vm.provider "virtualbox" do |vb|
+      vb.memory = "2024"
+    end
+    mn.vm.provision :shell, inline: "setenforce 0", run: "always"
+    mn.vm.provision :docker
+    mn.vm.provision :docker_compose, yml: "/vagrant_data/docker-compose.yml", run: "always"
+  end
+end
