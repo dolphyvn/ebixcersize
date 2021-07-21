@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
   # config.vm.box = "generic/centos8"
 
 
-
   config.vm.define "nodeexporter" do |np|
     np.vm.network :forwarded_port, host: 9100, guest: 9100, auto_correct: true
 
@@ -55,15 +54,18 @@ Vagrant.configure("2") do |config|
     # gf.vm.network :private_network, type: "dhcp"
     gf.vm.network :forwarded_port, host: 3000, guest: 3000, auto_correct: true
     gf.vm.synced_folder "./provisioning/", "/etc/grafana/provisioning/"
-    # config.vm.provider "docker"
+    # config.vm.provider "docker" GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
 
     gf.vm.provider "docker" do |d2|
       d2.image = "grafana/grafana:8.0.6"
       d2.name = "grafana"
       d2.link("prometheus:prometheus")
+      d2.env = {
+              "GF_SECURITY_ADMIN_USER":"admin",
+              "GF_SECURITY_ADMIN_PASSWORD":"ebiadmin",
+      }
       # d2.link "prometheus:prometheus"
       # d.ports = ["3000:3000"]
-      # d.cmd = ["vertx", "run", "vertx-examples/src/raw/java/httphelloworld/HelloWorldServer.java"]
     end
 
     gf.vm.provider "podman" do |pm2|

@@ -4,6 +4,14 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
+
+$set_environment_variables = <<SCRIPT
+tee "/etc/profile.d/env.sh" > "/dev/null" <<EOF
+export ADMIN_USER=admin
+export ADMIN_PASSWORD=ebiadmin
+EOF
+SCRIPT
+
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/8"
   config.vagrant.plugins = ["vagrant-vbguest"]
@@ -14,12 +22,14 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "../../ebixcersize/", "/vagrant_data/"
   config.vm.define "monitoring" do |mn|
     mn.vm.network "private_network", type: "dhcp"
-    mn.vm.synced_folder "../", "/vagrant_data/", nfs: true
+    mn.vm.synced_folder "../", "/vagrant_data/"
+    # mn.vm.synced_folder "../", "/vagrant_data/", nfs: true
     mn.vbguest.installer_options = { allow_kernel_upgrade: true }
     mn.vm.provider "virtualbox" do |vb|
       vb.memory = "2024"
     end
     mn.vm.provision :shell, inline: "setenforce 0", run: "always"
+    mn.vm.provision :shell, inline: $set_environment_variables, run: "always"
     mn.vm.provision :docker
     mn.vm.provision :docker_compose, yml: "/vagrant_data/docker-compose.yml", run: "always"
   end
