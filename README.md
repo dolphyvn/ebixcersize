@@ -15,7 +15,7 @@ If you want to use vagrant. Please install vagrant docker-compose plugin. You ca
 ### Clone repo:
 ```
 git clone https://github.com/dolphyvn/ebixcersize.git
-cd ebiexcersie
+cd ebixcersize
 ```
 
 There are three options for you to run
